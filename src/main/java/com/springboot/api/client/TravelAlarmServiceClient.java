@@ -21,7 +21,7 @@ public class TravelAlarmServiceClient {
     public Mono<TravelAlarmServiceResponse> fetchAlarmInfo(String countryName, String isoCode) {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
-                        .path("/1262000/TravelAlarmService2")
+                        .path("/1262000/TravelAlarmService2/getTravelAlarmList2")
                         .queryParam("serviceKey", serviceKey)
                         .queryParam("returnType", "JSON")
                         .queryParam("pageNo", 1)
@@ -31,5 +31,10 @@ public class TravelAlarmServiceClient {
                         .build())
                 .retrieve()
                 .bodyToMono(TravelAlarmServiceResponse.class);
+    }
+
+    // 새로 추가한 wrapper 메서드: ISO 코드 없이
+    public Mono<TravelAlarmServiceResponse> fetchAlarmInfo(String countryName) {
+        return fetchAlarmInfo(countryName, "");
     }
 }

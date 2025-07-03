@@ -16,7 +16,7 @@ public class TravelWarningClient {
     private final WebClient webClient;
 
     // 외교부_여행경보제도 API 키 (디코딩된 키 사용)
-    @Value("${external.api.travel-warning.service-key}")
+    @Value("${external.api.service-key.default}")
     private String serviceKey;
 
     public Mono<TravelWarningResponse> fetchTravelWarnings(String countryName) {

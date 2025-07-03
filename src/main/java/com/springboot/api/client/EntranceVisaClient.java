@@ -32,4 +32,9 @@ public class EntranceVisaClient {
                 .retrieve()
                 .bodyToMono(EntranceVisaResponse.class);
     }
+
+    // 국가명만 받는 wrapper (나머지는 default 값으로)
+    public Mono<EntranceVisaResponse> fetchEntranceVisa(String countryName) {
+        return fetchEntranceVisa(countryName, "", 1, 10);
+    }
 }

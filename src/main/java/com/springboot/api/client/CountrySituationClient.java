@@ -34,4 +34,8 @@ public class CountrySituationClient {
                 .retrieve()
                 .bodyToMono(CountrySituationResponse.class);
     }
+
+    public Mono<CountrySituationResponse> fetchCountrySituation(String countryName) {
+        return fetchCountrySituation(countryName, "", 2020, 2025, 1, 10); // iso 빈값, 연도 필터: 2020~2025
+    }
 }

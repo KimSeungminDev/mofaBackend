@@ -32,4 +32,7 @@ public class CountryFlagClient {
                 .retrieve()
                 .bodyToMono(CountryFlagResponse.class);
     }
+    public Mono<CountryFlagResponse> fetchCountryFlag(String countryName) {
+        return fetchCountryFlag(countryName, "", 1, 10); // ISO코드는 생략 가능
+    }
 }

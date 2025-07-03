@@ -1,5 +1,6 @@
 package com.springboot.config;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -20,6 +21,7 @@ public class WebClientConfig {
     }
 
     @Bean
+    @Qualifier("odcloudWebClient") // << 이거 꼭 있어야 함!
     public WebClient odcloudWebClient() {
         return WebClient.builder()
                 .baseUrl("https://api.odcloud.kr")

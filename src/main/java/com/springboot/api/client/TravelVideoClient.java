@@ -11,19 +11,21 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 @Service
-@RequiredArgsConstructor
 public class TravelVideoClient {
 
-    @Qualifier("odcloudWebClient")
-    private final WebClient webClient;
+    private final WebClient odcloudWebClient;
 
     @Value("${external.api.service-key.default}")
     private String serviceKey;
 
-    public Mono<TravelVideoResponse> fetchTravelVideos(int page, int perPage) {
-        return webClient.get()
+    public TravelVideoClient(@Qualifier("odcloudWebClient") WebClient odcloudWebClient) {
+        this.odcloudWebClient = odcloudWebClient;
+    }
+
+    public Mono<TravelVideoResponse> fetchTravelVideo(int page, int perPage) {
+        return odcloudWebClient.get()
                 .uri(uriBuilder -> uriBuilder
-                        .path("/api/15121204/v1/uddi:003a5622-bb22-4046-a91b-d12bb606d8b6")
+                        .path("/15121204/v1/uddi:003a5622-bb22-4046-a91b-d12bb606d8b6")
                         .queryParam("serviceKey", serviceKey)
                         .queryParam("page", page)
                         .queryParam("perPage", perPage)

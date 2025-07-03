@@ -43,4 +43,9 @@ public class SpecialWarningServiceClient {
                 .retrieve()
                 .bodyToMono(SpecialWarningServiceResponse.class);
     }
+
+    // wrapper 메서드: country만 입력받아 호출
+    public Mono<SpecialWarningServiceResponse> fetchSpecialWarnings(String country) {
+        return fetchSpecialWarnings(1, 10, country, "");
+    }
 }

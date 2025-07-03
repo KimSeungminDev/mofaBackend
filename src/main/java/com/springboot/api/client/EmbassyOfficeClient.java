@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class EmbassyOfficeClient {
@@ -31,5 +33,20 @@ public class EmbassyOfficeClient {
                         .build())
                 .retrieve()
                 .bodyToMono(EmbassyOfficeResponse.class);
+    }
+
+    // 필터링 wrapper
+    public Mono<EmbassyOfficeResponse> fetchEmbassyOffices(String countryName) {
+        return fetchEmbassyOffices(1, 500) // 충분히 많은 데이터 조회
+                .map(fullResponse -> {
+                    List<EmbassyOfficeResponse.EmbassyOfficeData> filtered = fullResponse.getData().stream()
+                            .filter(item -> item.getCountryName().equalsIgnoreCase(countryName))
+                            .toList();
+
+                    fullResponse.setData(filtered); // 필터링한 리스트로 대체
+                    fullResponse.setCurrentCount(filtered.size()); // 개수 갱신
+
+                    return fullResponse;
+                });
     }
 }

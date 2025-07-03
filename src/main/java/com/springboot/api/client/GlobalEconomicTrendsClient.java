@@ -18,7 +18,7 @@ public class GlobalEconomicTrendsClient {
     @Value("${external.api.service-key.default}")
     private String serviceKey;
 
-    public Mono<GlobalEconomicTrendsResponse> fetchEconomicTrends(int page, int perPage) {
+    public Mono<GlobalEconomicTrendsResponse> fetchGlobalEconomicTrends(int page, int perPage) {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/1262000/globalEconomicTrendsService")

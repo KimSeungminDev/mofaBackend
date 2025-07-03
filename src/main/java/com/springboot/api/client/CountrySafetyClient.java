@@ -18,7 +18,7 @@ public class CountrySafetyClient {
     @Value("${external.api.service-key.default}")
     private String serviceKey;
 
-    public Mono<CountrySafetyResponse> fetchSafetyNotices(String countryName, String countryIsoCode, int page, int numOfRows) {
+    public Mono<CountrySafetyResponse> fetchCountrySafety(String countryName, String countryIsoCode, int page, int numOfRows) {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/1262000/CountrySafetyService6")
@@ -31,5 +31,9 @@ public class CountrySafetyClient {
                         .build())
                 .retrieve()
                 .bodyToMono(CountrySafetyResponse.class);
+    }
+    // 간단 호출용 Wrapper 메서드
+    public Mono<CountrySafetyResponse> fetchCountrySafety(String countryName) {
+        return fetchCountrySafety(countryName, "", 1, 10); // ISO 코드: 빈값, 기본 페이지: 1, row: 10
     }
 }
