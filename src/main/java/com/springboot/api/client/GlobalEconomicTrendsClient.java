@@ -21,7 +21,7 @@ public class GlobalEconomicTrendsClient {
     public Mono<GlobalEconomicTrendsResponse> fetchGlobalEconomicTrends(int page, int perPage) {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
-                        .path("/1262000/globalEconomicTrendsService")
+                        .path("/1262000/globalEconomicTrendsService/getGlobalEconomicTrends")
                         .queryParam("serviceKey", serviceKey)
                         .queryParam("returnType", "JSON")
                         .queryParam("pageNo", page)

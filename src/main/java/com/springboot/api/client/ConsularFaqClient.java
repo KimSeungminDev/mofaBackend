@@ -25,7 +25,7 @@ public class ConsularFaqClient {
     public Mono<ConsularFaqResponse> fetchFaqs(int page, int perPage) {
         return odcloudWebClient.get()
                 .uri(uriBuilder -> uriBuilder
-                        .path("/api/15121/63/v1/uddi:c9a3185d-7fb6-45e4-aac1-86ba2ccc236b")
+                        .path("/api/15121453/v1/uddi:c9a3185d-77b6-45e4-aac1-86ba2ccc236b")
                         .queryParam("serviceKey", serviceKey)
                         .queryParam("page", page)
                         .queryParam("perPage", perPage)

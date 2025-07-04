@@ -20,21 +20,27 @@ public class EntranceVisaClient {
 
     public Mono<EntranceVisaResponse> fetchEntranceVisa(String countryName, String isoCode, int page, int numOfRows) {
         return webClient.get()
-                .uri(uriBuilder -> uriBuilder
-                        .path("/1262000/EntranceVisaService2")
-                        .queryParam("serviceKey", serviceKey)
-                        .queryParam("returnType", "JSON")
-                        .queryParam("cond[country_nm::EQ]", countryName)
-                        .queryParam("cond[country_iso_alp2::EQ]", isoCode)
-                        .queryParam("pageNo", page)
-                        .queryParam("numOfRows", numOfRows)
-                        .build())
+                .uri(uriBuilder -> {
+                    var builder = uriBuilder
+                            .path("/1262000/EntranceVisaService2/getEntranceVisaList2")
+                            .queryParam("serviceKey", serviceKey)
+                            .queryParam("returnType", "JSON")
+                            .queryParam("cond[country_nm::EQ]", countryName)
+                            .queryParam("pageNo", page)
+                            .queryParam("numOfRows", numOfRows);
+
+                    if (isoCode != null && !isoCode.isBlank()) {
+                        builder.queryParam("cond[country_iso_alp2::EQ]", isoCode);
+                    }
+
+                    return builder.build();
+                })
                 .retrieve()
                 .bodyToMono(EntranceVisaResponse.class);
     }
 
     // 국가명만 받는 wrapper (나머지는 default 값으로)
     public Mono<EntranceVisaResponse> fetchEntranceVisa(String countryName) {
-        return fetchEntranceVisa(countryName, "", 1, 10);
+        return fetchEntranceVisa(countryName, null, 1, 10);
     }
 }

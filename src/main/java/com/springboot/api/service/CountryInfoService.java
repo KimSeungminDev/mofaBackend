@@ -39,7 +39,7 @@ public class CountryInfoService {
                 entranceVisaClient.fetchEntranceVisa(countryName),
                 globalEconomicTrendsClient.fetchGlobalEconomicTrends(1, 10),
                 specialWarningServiceClient.fetchSpecialWarnings(countryName),
-                travelAlarmServiceClient.fetchAlarmInfo(countryName),
+                travelAlarmServiceClient.fetchAlarmInfo(countryName, null),
                 travelSpecialWarningClient.fetchSpecialWarnings(countryName),
                 travelVideoClient.fetchTravelVideo(1, 10),
                 travelWarningClient.fetchTravelWarnings(countryName)

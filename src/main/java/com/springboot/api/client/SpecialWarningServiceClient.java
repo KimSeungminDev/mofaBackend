@@ -31,21 +31,27 @@ public class SpecialWarningServiceClient {
      */
     public Mono<SpecialWarningServiceResponse> fetchSpecialWarnings(int page, int perPage, String country, String countryCode) {
         return webClient.get()
-                .uri(uriBuilder -> uriBuilder
-                        .path("/1262000/SptravelWarningServiceV2")
-                        .queryParam("serviceKey", serviceKey)
-                        .queryParam("pageNo", page)
-                        .queryParam("numOfRows", perPage)
-                        .queryParam("returnType", "JSON")
-                        .queryParam("cond[country_nm::EQ]", country)
-                        .queryParam("cond[country_iso_alp2::EQ]", countryCode)
-                        .build())
+                .uri(uriBuilder -> {
+                    var builder = uriBuilder
+                            .path("/1262000/SptravelWarningServiceV2/getSptravelWarningListV2")
+                            .queryParam("serviceKey", serviceKey)
+                            .queryParam("pageNo", page)
+                            .queryParam("numOfRows", perPage)
+                            .queryParam("returnType", "JSON")
+                            .queryParam("cond[country_nm::EQ]", country);
+
+                    if (countryCode != null && !countryCode.isBlank()) {
+                        builder.queryParam("cond[country_iso_alp2::EQ]", countryCode);
+                    }
+
+                    return builder.build();
+                })
                 .retrieve()
                 .bodyToMono(SpecialWarningServiceResponse.class);
     }
 
     // wrapper 메서드: country만 입력받아 호출
     public Mono<SpecialWarningServiceResponse> fetchSpecialWarnings(String country) {
-        return fetchSpecialWarnings(1, 10, country, "");
+        return fetchSpecialWarnings(1, 10, country, null);
     }
 }

@@ -11,7 +11,7 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/country")
+@RequestMapping("/search")
 public class CountryInfoController {
 
     private final CountryInfoService countryInfoService;

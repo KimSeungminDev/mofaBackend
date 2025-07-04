@@ -3,7 +3,6 @@
 package com.springboot.api.client;
 
 import com.springboot.api.dto.TravelVideoResponse;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -25,7 +24,7 @@ public class TravelVideoClient {
     public Mono<TravelVideoResponse> fetchTravelVideo(int page, int perPage) {
         return odcloudWebClient.get()
                 .uri(uriBuilder -> uriBuilder
-                        .path("/15121204/v1/uddi:003a5622-bb22-4046-a91b-d12bb606d8b6")
+                        .path("/api/15121204/v1/uddi:003a5622-bb22-4046-a91b-d12bb606d8b6")
                         .queryParam("serviceKey", serviceKey)
                         .queryParam("page", page)
                         .queryParam("perPage", perPage)

@@ -22,7 +22,7 @@ public class TravelWarningClient {
     public Mono<TravelWarningResponse> fetchTravelWarnings(String countryName) {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
-                        .path("/1262000/TravelWarningServiceV3")
+                        .path("/1262000/TravelWarningServiceV3/getTravelWarningListV3")
                         .queryParam("serviceKey", serviceKey)
                         .queryParam("returnType", "JSON")
                         .queryParam("pageNo", 1)

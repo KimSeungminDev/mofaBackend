@@ -20,19 +20,26 @@ public class CountryFlagClient {
 
     public Mono<CountryFlagResponse> fetchCountryFlag(String countryName, String isoCode, int page, int numOfRows) {
         return webClient.get()
-                .uri(uriBuilder -> uriBuilder
-                        .path("/1262000/CountryFlagService2")
-                        .queryParam("serviceKey", serviceKey)
-                        .queryParam("returnType", "JSON")
-                        .queryParam("cond[country_nm::EQ]", countryName)
-                        .queryParam("cond[country_iso_alp2::EQ]", isoCode)
-                        .queryParam("pageNo", page)
-                        .queryParam("numOfRows", numOfRows)
-                        .build())
+                .uri(uriBuilder -> {
+                    var builder = uriBuilder
+                            .path("/1262000/CountryFlagService2/getCountryFlagList2")
+                            .queryParam("serviceKey", serviceKey)
+                            .queryParam("returnType", "JSON")
+                            .queryParam("cond[country_nm::EQ]", countryName)
+                            .queryParam("pageNo", page)
+                            .queryParam("numOfRows", numOfRows);
+
+                    if (isoCode != null && !isoCode.isBlank()) {
+                        builder.queryParam("cond[country_iso_alp2::EQ]", isoCode);
+                    }
+
+                    return builder.build();
+                })
                 .retrieve()
                 .bodyToMono(CountryFlagResponse.class);
     }
     public Mono<CountryFlagResponse> fetchCountryFlag(String countryName) {
-        return fetchCountryFlag(countryName, "", 1, 10); // ISO코드는 생략 가능
+        return fetchCountryFlag(countryName, null, 1, 10); // ISO 코드 null로 전달
     }
+
 }

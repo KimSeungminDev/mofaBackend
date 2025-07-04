@@ -20,21 +20,24 @@ public class TravelAlarmServiceClient {
 
     public Mono<TravelAlarmServiceResponse> fetchAlarmInfo(String countryName, String isoCode) {
         return webClient.get()
-                .uri(uriBuilder -> uriBuilder
-                        .path("/1262000/TravelAlarmService2/getTravelAlarmList2")
-                        .queryParam("serviceKey", serviceKey)
-                        .queryParam("returnType", "JSON")
-                        .queryParam("pageNo", 1)
-                        .queryParam("numOfRows", 10)
-                        .queryParam("cond[country_nm::EQ]", countryName)
-                        .queryParam("cond[country_iso_alp2::EQ]", isoCode)
-                        .build())
+                .uri(uriBuilder -> {
+                    var builder = uriBuilder
+                            .path("/1262000/TravelAlarmService2/getTravelAlarmList2")
+                            .queryParam("serviceKey", serviceKey)
+                            .queryParam("returnType", "JSON")
+                            .queryParam("pageNo", 1)
+                            .queryParam("numOfRows", 10)
+                            .queryParam("cond[country_nm::EQ]", countryName);
+
+                    if (isoCode != null && !isoCode.isBlank()) {
+                        builder.queryParam("cond[country_iso_alp2::EQ]", isoCode);
+                    }
+
+                    return builder.build();
+                })
                 .retrieve()
                 .bodyToMono(TravelAlarmServiceResponse.class);
     }
 
-    // 새로 추가한 wrapper 메서드: ISO 코드 없이
-    public Mono<TravelAlarmServiceResponse> fetchAlarmInfo(String countryName) {
-        return fetchAlarmInfo(countryName, "");
-    }
+
 }
