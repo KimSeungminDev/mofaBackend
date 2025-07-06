@@ -13,7 +13,8 @@ import java.util.List;
  * 제공항목: 여권/사증 필요 여부 및 조건, 무비자 입국 근거, 비고 등
  */
 @Data
-public class EntranceVisaResponse {
+public class
+EntranceVisaResponse {
 
     /** 결과 코드 ("00" 정상 등) */
     @JsonProperty("resultCode")
