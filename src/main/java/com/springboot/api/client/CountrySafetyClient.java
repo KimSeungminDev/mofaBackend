@@ -41,7 +41,7 @@ public class CountrySafetyClient {
 
     // 간단 호출용 Wrapper 메서드
     public Mono<CountrySafetyResponse> fetchCountrySafety(String countryName) {
-        return fetchCountrySafety(countryName, null, 1, 10);
+        return fetchCountrySafety(countryName, null, 1, 1);
     }
 }
 
