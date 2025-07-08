@@ -44,7 +44,7 @@ public class CountryInfoService {
                 travelSpecialWarningClient.fetchSpecialWarnings(countryName),
                 travelVideoClient.fetchTravelVideo(1, 10),
                 travelWarningClient.fetchTravelWarnings(countryName),
-                naverNewsClient.searchNews(countryName + " 출입국")
+                naverNewsClient.searchNews(countryName + " 외교")
         );
 
         return Mono.zip(monoList, results -> {
