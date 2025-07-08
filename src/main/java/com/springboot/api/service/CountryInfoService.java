@@ -26,6 +26,7 @@ public class CountryInfoService {
     private final TravelSpecialWarningClient travelSpecialWarningClient;
     private final TravelVideoClient travelVideoClient;
     private final TravelWarningClient travelWarningClient;
+    private final NaverNewsClient naverNewsClient;
 
     public Mono<Map<String, Object>> getCountryInfo(String countryName) {
 
@@ -42,7 +43,8 @@ public class CountryInfoService {
                 travelAlarmServiceClient.fetchAlarmInfo(countryName, null),
                 travelSpecialWarningClient.fetchSpecialWarnings(countryName),
                 travelVideoClient.fetchTravelVideo(1, 10),
-                travelWarningClient.fetchTravelWarnings(countryName)
+                travelWarningClient.fetchTravelWarnings(countryName),
+                naverNewsClient.searchNews(countryName + " 출입국")
         );
 
         return Mono.zip(monoList, results -> {
@@ -60,6 +62,7 @@ public class CountryInfoService {
             resultMap.put("travelSpecialWarningClient", results[10]);
             resultMap.put("travelVideoClient", results[11]);
             resultMap.put("travelWarningClient", results[12]);
+            resultMap.put("naverNewsClient", results[13]);
             return resultMap;
         });
     }
