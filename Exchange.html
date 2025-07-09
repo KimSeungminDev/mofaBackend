@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <title>환율 시각화</title>
+    <link rel="stylesheet" href="Exchange_style.css" />
+</head>
+<body>
+    <header>
+        <div>로고 글자</div>
+        <nav>
+            <span>세부 1</span>
+            <span>세부 2</span>
+            <span>세부 3</span>
+            <span>세부 4</span>
+        </nav>
+        <div class="search-icon">🔍</div>
+    </header>
+
+    <section class="graph-section">
+        <div class='tableauPlaceholder' id='vizUSD'>
+            <noscript>
+                <a href='#'><img alt='USD 시각화' src='https://public.tableau.com/static/images/_1/_17515184080120/USD/1_rss.png' /></a>
+            </noscript>
+            <object class='tableauViz'>
+                <param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' />
+                <param name='embed_code_version' value='3' />
+                <param name='site_root' value='' />
+                <param name='name' value='_17515184080120/USD' />
+                <param name='tabs' value='no' />
+                <param name='toolbar' value='yes' />
+                <param name='static_image' value='https://public.tableau.com/static/images/_1/_17515184080120/USD/1.png' />
+                <param name='language' value='ko-KR' />
+            </object>
+        </div>
+    </section>
+
+    <div class="filter-bar">
+        <input type="text" placeholder="검색" id="searchFilter" />
+        <select id="sortOption">
+            <option value="name">이름순</option>
+            <option value="change">전일대비순</option>
+        </select>
+    </div>
+
+    <div class="country-list">
+        <table>
+            <thead>
+                <tr>
+                    <th>국기</th>
+                    <th>국가명</th>
+                    <th>통화</th>
+                    <th>환율 (원)</th>
+                    <th>전일대비</th>
+                </tr>
+            </thead>
+            <tbody id="exchangeRateTableBody"></tbody>
+        </table>
+    </div>
+
+    <div class="pagination" id="paginationControls"></div>
+
+    <footer>footer</footer>
+
+    <script type='text/javascript'>
+        const vizElement = document.querySelector('.tableauViz');
+        vizElement.style.width = '100%';
+        vizElement.style.height = '500px';
+        const script = document.createElement('script');
+        script.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
+        document.body.appendChild(script);
+    </script>
+
+    <script src="Exchange_script.js"></script>
+</body>
+</html>
