@@ -23,10 +23,10 @@ public class NaverNewsClient {
     }
 
     /**
-     * 기본값: display=10, start=1, sort=sim(정확도순)
+     * 기본값: 페이지네이션 없기에 start=1, sort=sim(정확도순)
      */
-    public Mono<NaverNewsResponse> searchNews(String query) {
-        return searchNews(query, 10, 1, "sim");
+    public Mono<NaverNewsResponse> searchNews(String query, int newsCount) {
+        return searchNews(query, newsCount, 1, "sim");
     }
 
     /**

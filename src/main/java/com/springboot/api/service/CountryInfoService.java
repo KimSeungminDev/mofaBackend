@@ -33,9 +33,10 @@ public class CountryInfoService {
     private final TravelWarningClient travelWarningClient;
     private final NaverNewsClient naverNewsClient;
 
-    public Mono<Map<String, Object>> getCountryInfo(String countryName) {
+    public Mono<Map<String, Object>> getCountryInfo(String countryName, int newsCount) {
 
-        Mono<List<NaverNewsResponse.Item>> newsMono = naverNewsClient.searchNews(countryName + " 외교")
+        Mono<List<NaverNewsResponse.Item>> newsMono = naverNewsClient
+                .searchNews(countryName + " 외교", newsCount, 1, "sim")
                 .map(NaverNewsResponse::getItems)
                 .map(this::processNewsItems); // ✅ 태그 제거 + og:image 처리
 

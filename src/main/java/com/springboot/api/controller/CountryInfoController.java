@@ -18,7 +18,7 @@ public class CountryInfoController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public Mono<ResponseEntity<Map<String, Object>>> getAllInfo(@RequestParam String country) {
-        return countryInfoService.getCountryInfo(country)
+        return countryInfoService.getCountryInfo(country, 10)
                 .map(ResponseEntity::ok);
     }
 }
