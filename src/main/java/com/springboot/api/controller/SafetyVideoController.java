@@ -13,7 +13,7 @@ public class SafetyVideoController {
 
     private final SafetyVideoService safetyVideoService;
 
-    @GetMapping("/safetyvideo")
+    @GetMapping("/safetyvideodemo")
     public Mono<TravelVideoResponse> getSafetyVideos() {
         return safetyVideoService.getSafetyVideos();
     }
