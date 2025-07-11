@@ -35,54 +35,75 @@ public class CountryInfoService {
 
     public Mono<Map<String, Object>> getCountryInfo(String countryName, int newsCount) {
 
+        // ✅ 일부 클라이언트에서만 사용할 alias 처리 (예: 미국 → 미합중국)
+        String aliasName = aliasIfNeeded(countryName);
+
+        // ✅ 네이버 뉴스 Mono 구성
         Mono<List<NaverNewsResponse.Item>> newsMono = naverNewsClient
                 .searchNews(countryName + " 외교", newsCount, 1, "sim")
                 .map(NaverNewsResponse::getItems)
                 .map(this::processNewsItems); // ✅ 태그 제거 + og:image 처리
 
+        // ✅ 클라이언트 요청 리스트
         List<Mono<?>> monoList = List.of(
-                consularFaqClient.fetchFaqs(1, 10),
-                countryFlagClient.fetchCountryFlag(countryName),
-                countryPoliticsClient.fetchCountryPolitics(countryName),
-                countrySafetyClient.fetchCountrySafety(countryName),
+//              consularFaqClient.fetchFaqs(1, 10),
+                countryFlagClient.fetchCountryFlag(aliasName), // ✅ alias 적용
+                countryPoliticsClient.fetchCountryPolitics(aliasName), // ✅ alias 적용
+                countrySafetyClient.fetchCountrySafety(aliasName), // ✅ alias 적용
                 countrySituationClient.fetchCountrySituation(countryName),
                 embassyOfficeClient.fetchEmbassyOffices(countryName),
-                entranceVisaClient.fetchEntranceVisa(countryName),
-                globalEconomicTrendsClient.fetchGlobalEconomicTrends(1, 10),
-                specialWarningServiceClient.fetchSpecialWarnings(countryName),
-                travelAlarmServiceClient.fetchAlarmInfo(countryName, null),
+                entranceVisaClient.fetchEntranceVisa(aliasName),
+//              globalEconomicTrendsClient.fetchGlobalEconomicTrends(1, 10),
+                specialWarningServiceClient.fetchSpecialWarnings(aliasName), // ✅ alias 적용
+                travelAlarmServiceClient.fetchAlarmInfo(aliasName, null), // ✅ alias 적용
                 travelSpecialWarningClient.fetchSpecialWarnings(countryName),
-                travelVideoClient.fetchTravelVideo(1, 10),
+//              travelVideoClient.fetchTravelVideo(1, 10),
                 travelWarningClient.fetchTravelWarnings(countryName),
                 newsMono // ✅ 수정된 Mono
         );
 
+        // ✅ 키값 리스트 (위 순서와 1:1 매칭)
+        List<String> keys = List.of(
+//              "consularFaqClient",
+                "countryFlagClient",
+                "countryPoliticsClient",
+                "countrySafetyClient",
+                "countrySituationClient",
+                "embassyOfficeClient",
+                "entranceVisaClient",
+//              "globalEconomicTrendsClient",
+                "specialWarningServiceClient",
+                "travelAlarmServiceClient",
+                "travelSpecialWarningClient",
+//              "travelVideoClient",
+                "travelWarningClient",
+                "naverNewsClient"
+        );
+
+        // ✅ 결과 매핑
         return Mono.zip(monoList, results -> {
             Map<String, Object> resultMap = new HashMap<>();
-            resultMap.put("consularFaqClient", results[0]);
-            resultMap.put("countryFlagClient", results[1]);
-            resultMap.put("countryPoliticsClient", results[2]);
-            resultMap.put("countrySafetyClient", results[3]);
-            resultMap.put("countrySituationClient", results[4]);
-            resultMap.put("embassyOfficeClient", results[5]);
-            resultMap.put("entranceVisaClient", results[6]);
-            resultMap.put("globalEconomicTrendsClient", results[7]);
-            resultMap.put("specialWarningServiceClient", results[8]);
-            resultMap.put("travelAlarmServiceClient", results[9]);
-            resultMap.put("travelSpecialWarningClient", results[10]);
-            resultMap.put("travelVideoClient", results[11]);
-            resultMap.put("travelWarningClient", results[12]);
-            resultMap.put("naverNewsClient", results[13]); // ✅ 여기엔 이제 List<Item>
+            for (int i = 0; i < results.length && i < keys.size(); i++) {
+                resultMap.put(keys.get(i), results[i]);
+            }
             return resultMap;
         });
+    }
+
+    // ✅ 특정 클라이언트용 국가명 치환 로직
+    private String aliasIfNeeded(String countryName) {
+        if ("미국".equals(countryName)) {
+            return "미합중국";
+        }
+        return countryName;
     }
 
     // ✅ 뉴스 항목 가공: 태그 제거 + 썸네일 추출
     private List<NaverNewsResponse.Item> processNewsItems(List<NaverNewsResponse.Item> items) {
         return items.stream().map(item -> {
-            // 가공을 할 때, 태그 제거를 원하지 않아 타이클과 내용 항목은 태그 제거 로직 주석처리
-//            item.setTitle(stripHtml(item.getTitle()));
-//            item.setDescription(stripHtml(item.getDescription()));
+            // 가공을 할 때, 태그 제거를 원하지 않아 타이틀과 내용 항목은 태그 제거 로직 주석처리
+//          item.setTitle(stripHtml(item.getTitle()));
+//          item.setDescription(stripHtml(item.getDescription()));
             item.setImageUrl(extractOgImage(item.getOriginallink()));
             return item;
         }).collect(Collectors.toList());
