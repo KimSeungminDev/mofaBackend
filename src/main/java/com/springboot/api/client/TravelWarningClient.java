@@ -1,4 +1,4 @@
-// TravelWarningClient.java - 공공데이터 API: 외교부_여행경보제도 조회
+// TravelWarningClient.java - 공공데이터 API: 외교부_툭별여행경보제도 조회
 
 package com.springboot.api.client;
 
@@ -15,7 +15,7 @@ public class TravelWarningClient {
 
     private final WebClient webClient;
 
-    // 외교부_여행경보제도 API 키 (디코딩된 키 사용)
+    // 외교부_특별여행경보제도 API 키 (디코딩된 키 사용)
     @Value("${external.api.service-key.default}")
     private String serviceKey;
 
