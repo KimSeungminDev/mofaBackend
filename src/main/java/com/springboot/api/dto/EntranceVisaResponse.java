@@ -1,12 +1,9 @@
-// EntranceVisaResponse.java - 외교부_국가·지역별 입국허가요건 API 응답 DTO
-
 package com.springboot.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.util.List;
-
 
 /**
  * 외교부_국가·지역별 입국허가요건 API 응답 DTO
@@ -15,50 +12,65 @@ import java.util.List;
 @Data
 public class EntranceVisaResponse {
 
-    /** 결과 코드 ("00" 정상 등) */
-    @JsonProperty("resultCode")
-    private String resultCode;
-
-    /** 결과 메시지 ("정상") */
-    @JsonProperty("resultMsg")
-    private String resultMsg;
-
-    /** 한 페이지 결과 수 */
-    @JsonProperty("numOfRows")
-    private int numOfRows;
-
-    /** 페이지 번호 */
-    @JsonProperty("pageNo")
-    private int pageNo;
-
-    /** 전체 결과 수 */
-    @JsonProperty("totalCount")
-    private int totalCount;
-
-    /** 현재 결과 수 */
-    @JsonProperty("currentCount")
-    private int currentCount;
-
-    /** 입국허가요건 목록 */
-    @JsonProperty("data")
-    private DataItems data;
+    @JsonProperty("response")
+    private ResponseWrapper response;
 
     @Data
-    public static class DataItems {
+    public static class ResponseWrapper {
+
+        @JsonProperty("header")
+        private Header header;
+
+        @JsonProperty("body")
+        private Body body;
+    }
+
+    @Data
+    public static class Header {
+        @JsonProperty("resultCode")
+        private String resultCode;
+
+        @JsonProperty("resultMsg")
+        private String resultMsg;
+    }
+
+    @Data
+    public static class Body {
+        @JsonProperty("dataType")
+        private String dataType;
+
+        @JsonProperty("items")
+        private Items items;
+
+        @JsonProperty("numOfRows")
+        private int numOfRows;
+
+        @JsonProperty("pageNo")
+        private int pageNo;
+
+        @JsonProperty("totalCount")
+        private int totalCount;
+    }
+
+    @Data
+    public static class Items {
         @JsonProperty("item")
-        private List<Item> items;
+        private List<Item> item;
     }
 
     @Data
     public static class Item {
-        @JsonProperty("Id")
-        private String id; // 입국허가요건 ID
+        @JsonProperty("id")
+        private int id; // 입국허가요건 ID
 
         @JsonProperty("country_eng_nm")
         private String countryEngNm; // 국가영문명
 
         @JsonProperty("country_nm")
         private String countryNm; // 국가명 (한글)
+
+        @JsonProperty("country_iso_alp2")
+        private String isoCode; // ISO 2자리 코드
 
         @JsonProperty("iso_num")
         private String isoNum; // ISO 숫자코드
