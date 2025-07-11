@@ -91,9 +91,18 @@ public class CountryInfoService {
     }
 
     // ✅ 특정 클라이언트용 국가명 치환 로직
+    // 중앙아프리카-중앙아프리카공화국, 교황청-바티칸 해당 두 분류는 애매한 부분 있어서 제외
     private String aliasIfNeeded(String countryName) {
         if ("미국".equals(countryName)) {
             return "미합중국";
+        } else if ("네팔".equals(countryName)) {
+            return "네팔연방";
+        } else if ("키르기스스탄".equals(countryName)) {
+            return "키르기즈공화국";
+        } else if ("베네수엘라".equals(countryName)) {
+            return "베네수엘라볼리바르";
+        } else if ("튀르키예".equals(countryName)) {
+            return "튀르키예공화국";
         }
         return countryName;
     }
