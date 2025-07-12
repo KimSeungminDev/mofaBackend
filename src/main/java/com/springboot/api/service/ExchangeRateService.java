@@ -12,6 +12,7 @@ import reactor.core.publisher.Mono;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -113,8 +114,9 @@ public class ExchangeRateService {
                 });
     }
 
+    // 날짜 없으면 오늘 기준 가장 최근 평일 반환
     public String getLatestWeekday() {
-        LocalDate today = LocalDate.now();
+        LocalDate today = LocalDate.now(ZoneId.of("Asia/Seoul"));
         DayOfWeek dayOfWeek = today.getDayOfWeek();
         LocalDate targetDate = today;
 
@@ -126,4 +128,19 @@ public class ExchangeRateService {
 
         return targetDate.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
     }
+    // 날짜가 주말이면 평일로 보정
+    public String correctToWeekday(String dateStr) {
+        LocalDate date = LocalDate.parse(dateStr, DateTimeFormatter.ofPattern("yyyyMMdd"));
+        DayOfWeek day = date.getDayOfWeek();
+
+        if (day == DayOfWeek.SATURDAY) {
+            date = date.minusDays(1);
+        } else if (day == DayOfWeek.SUNDAY) {
+            date = date.minusDays(2);
+        }
+
+        return date.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+    }
+
+
 }
