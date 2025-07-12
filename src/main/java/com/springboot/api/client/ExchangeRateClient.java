@@ -13,6 +13,8 @@ import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 
 import javax.net.ssl.SSLException;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 
 @Component
 @RequiredArgsConstructor
@@ -23,21 +25,39 @@ public class ExchangeRateClient {
 
     private final WebClient webClient = createUnsafeWebClient();
 
-    /**
-     * API 서버 깨우기용 더미 호출: 서버 기동 시 한 번 호출
-     */
     @PostConstruct
     public void initDummyCall() {
-        System.out.println("[ExchangeRateClient] 서버 기동 시 더미 API 호출 시작");
-        String today = java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyyMMdd"));
+        System.out.println("[ExchangeRateClient] 🚀 서버 기동 시 더미 API 호출 시작");
 
-        getExchangeRates(today).subscribe(
-                response -> System.out.println("[ExchangeRateClient] 더미 API 호출 성공, 응답 수: " + response.length),
-                error -> System.err.println("[ExchangeRateClient] 더미 API 호출 실패: " + error.getMessage())
+        String today = java.time.LocalDate.now()
+                .format(java.time.format.DateTimeFormatter.ofPattern("yyyyMMdd"));
+
+        // 🔥 주말 보정 추가
+        String corrected = correctToWeekday(today);
+
+        getExchangeRates(corrected).subscribe(
+                response -> System.out.println("[ExchangeRateClient] ✅ 더미 API 응답 수: " + response.length),
+                error -> System.err.println("[ExchangeRateClient] ❌ 더미 API 호출 실패: " + error.getMessage())
         );
     }
 
+    // 내부에 보정 메서드 추가
+    private String correctToWeekday(String dateStr) {
+        LocalDate date = LocalDate.parse(dateStr, java.time.format.DateTimeFormatter.ofPattern("yyyyMMdd"));
+        DayOfWeek day = date.getDayOfWeek();
+
+        if (day == DayOfWeek.SATURDAY) {
+            date = date.minusDays(1);
+        } else if (day == DayOfWeek.SUNDAY) {
+            date = date.minusDays(2);
+        }
+
+        return date.format(java.time.format.DateTimeFormatter.ofPattern("yyyyMMdd"));
+    }
+
     public Mono<ExchangeRateResponse[]> getExchangeRates(String searchDate) {
+        System.out.println("💡 [API 요청] 날짜 = " + searchDate);
+
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/site/program/financial/exchangeJSON")
