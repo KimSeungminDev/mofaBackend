@@ -49,6 +49,9 @@ public class ExchangeRateService {
                     ExchangeRateResponse[] keximRates = tuple.getT1();
                     CountryCurrencyResponse[] countries = tuple.getT2();
 
+                    System.out.println("💡 keximRates length = " + (keximRates != null ? keximRates.length : 0));
+                    System.out.println("💡 countries length = " + (countries != null ? countries.length : 0));
+
                     List<CountryCurrencyResponse> countryList = Arrays.asList(countries);
                     List<CombinedExchangeRateResponse> combinedList = new ArrayList<>();
 
@@ -66,7 +69,7 @@ public class ExchangeRateService {
                             continue;
                         }
 
-                        // === 핵심 수정 부분: 통화 코드 정제 ===
+                        // ===통화 코드 정제 ===
                         String originalCurrencyCode = keximRate.getCurrencyCode();
                         String processedCurrencyCode = originalCurrencyCode;
                         if (originalCurrencyCode != null && originalCurrencyCode.contains("(")) {
@@ -95,6 +98,7 @@ public class ExchangeRateService {
                                 dto.setCountryName(country.getName() != null ? country.getName().getCommon() : null);
 
                                 combinedList.add(dto);
+
                             }
                         } else {
                             CombinedExchangeRateResponse dto = new CombinedExchangeRateResponse();
@@ -110,6 +114,7 @@ public class ExchangeRateService {
                             System.out.println("No matching country found for currency code: " + currentCurrencyCode + ". Added as '알 수 없음'.");
                         }
                     }
+                    System.out.println("최종 CombinedExchangeRateResponse 개수: " + combinedList.size());
                     return combinedList;
                 });
     }

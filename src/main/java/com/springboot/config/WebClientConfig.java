@@ -24,6 +24,7 @@ public class WebClientConfig {
                 .build();
     }
 
+
     /* ===== 3) ODcloud 전용 WebClient ===== */
     @Bean
     @Qualifier("odcloudWebClient")                  // 기존 코드 그대로 유지
@@ -47,4 +48,15 @@ public class WebClientConfig {
                 .defaultHeader("X-Naver-Client-Secret", clientSecret)
                 .build();
     }
+
+    /* ===== 5) 한국수출입은행 전용 WebClient ===== */
+    @Bean
+    @Qualifier("eximWebClient")
+    public WebClient eximWebClient(WebClient.Builder builder) {
+        return builder
+                .clone()
+                .baseUrl("https://oapi.koreaexim.go.kr")
+                .build();
+    }
+
 }
